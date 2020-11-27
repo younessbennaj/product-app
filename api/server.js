@@ -14,14 +14,33 @@ const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology:
 
 //Connection au serveur de notre base de donnée
 client.connect(err => {
-    if (err) console.log(err);
+    if (err) console.log('Failed to connect');
     else {
-        console.log('connected');
+        //La connection au serveur est un succès
+        console.log("Connected correctly to server");
         //On récupère la collection "phones" de notre base de donnée "shop"
-        //const collection = client.db(shop).collection("phones");
+        const collection = client.db(dbName).collection("phones");
 
-        //On termine la connection
-        client.close();
+        //On contruit notre document qui représente un téléphone en base de donnée
+        //On laisse mongoDB ajouter le champ _id à chaque document
+        let phone = {
+            "name": "AC1 Phone1",
+            "type": "phone",
+            "price": 200.05,
+            "rating": 3.8,
+            "warranty_years": 1,
+            "available": true
+        }
+
+        //On ajoute un seul document 
+        collection.insertOne(phone).then((err, result) => {
+            console.log('Document successfully added to the collection');
+
+            //On termine la connection
+            client.close();
+        })
+
+
     }
 });
 
