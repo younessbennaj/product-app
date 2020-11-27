@@ -2,10 +2,13 @@
 var express = require('express')
 var app = express();
 
+// Méthode pour se connecter à mongoDB et à la base de donnée
+const { connect } = require('../db');
+
 var router = express.Router();
 
 //Méthode GET sur la route '/api/phones' : Permet de récupérer la collection de produits de type "phone"
-app.get('/api/phones', function (req, res) {
+router.get('/', function (req, res) {
     connect(db => {
         //On récupère notre collection "phones"
         const collection = db.collection("phones");

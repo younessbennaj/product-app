@@ -36,3 +36,5 @@ function connect(cb) {
         }
     });
 }
+
+module.exports = { connect };
