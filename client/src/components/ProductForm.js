@@ -1,4 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+
+import axios from "axios";
 
 import * as Yup from 'yup';
 
@@ -29,33 +31,34 @@ const ProductSchema = Yup.object({
 
 const ProductForm = ({ mode, productId }) => {
 
-    let productModel = {
-        name: "test",
-        price: 200.50,
-        rating: 3,
-        warranty_years: 2,
-        avaible: false
-    }
-
-    const [product, setProduct] = useState(productModel);
+    const [product, setProduct] = useState({});
 
     /*
         Si on passe un productId via les props du composant, alors on va récupérer 
         les données du produit pour pré-remplir le formulaire dans le cas de la modification
         d'un produit existant 
     */
-    if (productId) {
-        console.log(productId);
-    }
+    useEffect(() => {
+        if (productId) {
+            axios.get(`/api/phones/${productId}`)
+                .then(response => {
+                    setProduct(response.data);
+                })
+        }
+    }, [productId]);
 
-    function handleChange() {
-
-    }
     return (
         <div>
             <h1>{mode === "create" ? "Create a new product" : "Update your product"}</h1>
             <Formik
-                initialValues={product}
+                enableReinitialize={true}
+                initialValues={{
+                    name: product.name ? product.name : "",
+                    price: product.price ? product.price : 0,
+                    rating: product.rating ? product.rating : 0,
+                    warranty_years: product.warranty_years ? product.warranty_years : 0,
+                    avaible: product.avaible ? product.avaible : true
+                }}
                 validationSchema={ProductSchema}
                 onSubmit={product => {
                     console.log(product);
