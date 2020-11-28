@@ -39,7 +39,7 @@ function App() {
         </ul>
       </div>
       {/* ProductDetails */}
-      {phones.length && <ProductDetails product={phones[0]} />}
+      {phones.length && <ProductDetails productId={phones[2]._id} />}
       {/* ProductForm */}
       <ProductForm mode="create" />
       {/* ProductModal */}
