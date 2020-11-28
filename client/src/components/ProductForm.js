@@ -61,6 +61,9 @@ const ProductForm = ({ mode, productId }) => {
                 }}
                 validationSchema={ProductSchema}
                 onSubmit={product => {
+
+                    product = { ...product, avaible: product.avaible === "true" ? true : false };
+
                     console.log(product);
                 }}
             >
@@ -90,13 +93,17 @@ const ProductForm = ({ mode, productId }) => {
                             <legend>Select a stock status:</legend>
 
                             <div>
-                                <Field type="radio" id="avaible" name="stock" value="true" checked={values.avaible} />
-                                <label htmlFor="avaible">avaible</label>
+                                <label >
+                                    avaible
+                                    <Field type="radio" name="avaible" value="true" />
+                                </label>
                             </div>
 
                             <div>
-                                <Field type="radio" id="out_of_stock" name="stock" value="false" checked={!values.avaible} />
-                                <label htmlFor="out_of_stock">out of stock</label>
+                                <label >
+                                    out of stock
+                                    <Field type="radio" name="avaible" value="false" />
+                                </label>
                             </div>
 
                         </fieldset>
