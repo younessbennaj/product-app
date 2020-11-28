@@ -37,5 +37,33 @@ router.get('/:_id', function (req, res) {
     })
 })
 
+router.post('/', function (req, res) {
+    connect(db => {
+        const collection = db.collection("phones");
+
+        //On contruit notre document qui représente un téléphone en base de donnée
+        //On laisse mongoDB ajouter le champ _id à chaque document
+        let phone = {
+            "name": req.body.name,
+            "type": "phone",
+            "price": req.body.price,
+            "rating": req.body.rating,
+            "warranty_years": req.body.warranty_years,
+            "available": req.body.available
+        }
+
+        collection.insertOne(phone, function (error, response) {
+            if (error) {
+                console.log('Error occurred while inserting');
+                //On retourne le document qu'on vient d'insérer dans la collection
+                res.send({ message: "Error occurred while inserting" })
+            } else {
+                console.log('inserted record', response.ops[0]);
+                res.send(response.ops[0])
+            }
+        });
+    })
+})
+
 
 module.exports = router;
