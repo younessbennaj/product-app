@@ -51,6 +51,9 @@ function App() {
                   )
                 })}
               </ul>
+              <div>
+                <button><Link to="/create">Create a product</Link></button>
+              </div>
             </div>
           </Route>
           {/* Route pour la page de détails d'un produit en fonction de l'Id path : "/product/:id" */}
@@ -58,12 +61,12 @@ function App() {
             {/* ProductDetails */}
             {phones.length && <ProductDetails productId={phones[2]._id} />}
           </Route>
-          <Route path="/product/create">
+          <Route path="/create">
             {/* ProductForm */}
             <ProductForm mode="create" />
           </Route>
           {/* ProductModal */}
-          <Route path="/product/edit">
+          <Route path="/edit/:productId">
             <div>
               {phones.length && <ProductForm mode="edit" productId={phones[0]._id} />}
             </div>

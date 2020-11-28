@@ -1,6 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import axios from "axios";
 
+//React router
+import {
+    Link
+} from "react-router-dom";
+
 import {
     useParams
 } from "react-router-dom";
@@ -45,7 +50,7 @@ const ProductDetails = () => {
                     </div>
                     <div>
                         {/* Action button here */}
-                        <button onClick={handleEditClick}>Edit</button>
+                        <button onClick={handleEditClick}><Link to={`/edit/${product._id}`}>Edit</Link></button>
                         <button onClick={handleDeleteClick}>Delete</button>
                     </div>
                 </div>
