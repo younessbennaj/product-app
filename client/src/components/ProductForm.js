@@ -64,7 +64,22 @@ const ProductForm = ({ mode, productId }) => {
 
                     product = { ...product, avaible: product.avaible === "true" ? true : false };
 
-                    console.log(product);
+                    var config = {
+                        //changer la methode de la requête dynamiquement en fonction du mode
+                        method: mode === "create" ? 'post' : 'put',
+                        url: `/api/phones${mode === "create" ? '' : `/${productId}`}`,
+                        data: product
+                    };
+
+                    axios(config)
+                        .then(function (response) {
+                            console.log(response.data);
+                        })
+                        .catch(function (error) {
+                            console.log(error);
+                        });
+
+                    console.log(config);
                 }}
             >
                 {({ values }) => (
