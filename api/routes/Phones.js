@@ -19,7 +19,7 @@ router.get('/', function (req, res) {
         //On récupère tous les documents de notre collection
         //On convertit notre collection en un tableau
         collection.find({}).toArray(function (err, docs) {
-            res.send(docs);
+            res.send(JSON.stringify(docs));
         });
     })
 })
@@ -32,11 +32,12 @@ router.get('/:_id', function (req, res) {
         //Comme on laisse mongoDB renseigner le champ _id, il ajouter un Id représenter par un objet ObjectId()
         //On doit donc utiliser le contructeur ObjectId() pour qu'il nous retourne un objet qui correspond à un Id en base de donnée
         collection.find({ _id: ObjectId(req.params._id) }).next((err, doc) => {
-            res.send(doc);
+            res.send(JSON.stringify(doc));
         })
     })
 })
 
+//Méthode POST sur la route '/api/phones' : Permet de créer un produit de type "phone" dans la base de donnée
 router.post('/', function (req, res) {
     connect(db => {
         const collection = db.collection("phones");
@@ -55,13 +56,57 @@ router.post('/', function (req, res) {
         collection.insertOne(phone, function (error, response) {
             if (error) {
                 console.log('Error occurred while inserting');
-                //On retourne le document qu'on vient d'insérer dans la collection
+                //On retourne un message d'erreur
                 res.send({ message: "Error occurred while inserting" })
             } else {
-                console.log('inserted record', response.ops[0]);
-                res.send(response.ops[0])
+                console.log('inserted document', response.ops[0]);
+                //On retourne le document qu'on vient d'insérer dans la collection
+                res.send(JSON.stringify(response.ops[0]))
             }
         });
+    })
+})
+
+//Méthode PUT sur la route '/api/phones/:_id' : Permet de mettre à jour un produit de type "phone" dans la base de donnée
+router.put('/:_id', function (req, res) {
+    connect(db => {
+        const collection = db.collection("phones");
+
+        //On met à jour notre document en utilisant le filtre de query sur l'id récupéré en paramètres de la requête
+        collection.updateOne({ _id: ObjectId(req.params._id) }, { $set: req.body }, function (error, response) {
+            if (error) {
+                console.log('Error occurred while updating');
+                //On retourne un message d'erreur
+                res.send({ message: "Error occurred while updating" })
+            } else {
+                console.log('Product updated');
+                //On retourne un message de succès
+                res.send(JSON.stringify({ message: 'Product updated' }));
+            }
+        }
+        )
+    })
+})
+
+//Méthode DELETE sur la route '/api/phones/:_id' : Permet de supprimer un produit de type "phone" dans la base de donnée
+router.delete('/:_id', function (req, res) {
+    connect(db => {
+        const collection = db.collection("phones");
+        // console.log(req.params._id);
+        // res.send('deleted');
+        //On supprime notre document en utilisant le filtre de query sur l'id récupéré en paramètres de la requête
+        collection.deleteOne({ _id: ObjectId(req.params._id) }, function (error, response) {
+            if (error) {
+                console.log('Error occurred while updating');
+                //On retourne un message d'erreur
+                res.send({ message: "Error occurred while deleting" })
+            } else {
+                console.log('Product deleted');
+                //On retourne un message de succès
+                res.send(JSON.stringify({ message: 'Product deleted' }));
+            }
+        }
+        )
     })
 })
 
