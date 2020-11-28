@@ -1,7 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import axios from "axios";
 
-const ProductDetails = ({ productId }) => {
+import {
+    useParams
+} from "react-router-dom";
+
+const ProductDetails = () => {
+
+    let { productId } = useParams();
+
     const [product, setProduct] = useState(null);
 
     useEffect(() => {

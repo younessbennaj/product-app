@@ -39,6 +39,7 @@
   },
   "proxy": "http://localhost:5000",
   "devDependencies": {
+    "react-router-dom": "^5.2.0",
     "yup": "^0.31.0"
   }
 }
