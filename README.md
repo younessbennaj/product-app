@@ -12,12 +12,14 @@ supprimer ou en créer de nouveaux, vous afficherez les produits dans une liste
 ## Lancer le serveur:
 
 ```
+cd api
 npm run serve
 ```
 
 ## Lancer le client: 
 
 ```
+cd client
 npm run start
 ```
 
