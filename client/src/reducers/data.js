@@ -6,7 +6,7 @@ export const data = (state = [], { payload, type }) => {
             return [...payload];
         case "ADD_PRODUCT":
             console.log('Add product');
-            return state
+            return [...state, payload]
         case "REMOVE_PRODUCT":
             console.log('Add product');
             return state

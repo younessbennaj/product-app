@@ -4,8 +4,15 @@ import axios from "axios";
 
 import * as Yup from 'yup';
 
+//Redux 
+import { connect } from 'react-redux';
+
+//Action
+import { addProduct } from "../actions";
+
 import {
-    useParams
+    useParams,
+    useHistory
 } from "react-router-dom";
 
 //Material UI 
@@ -39,11 +46,13 @@ const ProductSchema = Yup.object({
         .required('Required')
 });
 
-const ProductForm = ({ mode }) => {
+const ProductForm = ({ mode, addProduct }) => {
 
     let { productId } = useParams();
 
     const [product, setProduct] = useState({});
+
+    let history = useHistory();
 
     /*
         Si on passe un productId via les props du composant, alors on va récupérer 
@@ -74,22 +83,9 @@ const ProductForm = ({ mode }) => {
                 }}
                 validationSchema={ProductSchema}
                 onSubmit={product => {
-                    product = { ...product, rating: parseFloat(product.rating), available: product.available === "true" ? true : false };
 
-                    var config = {
-                        //changer la methode de la requête dynamiquement en fonction du mode
-                        method: mode === "create" ? 'post' : 'put',
-                        url: `/api/phones${mode === "create" ? '' : `/${productId}`}`,
-                        data: product
-                    };
-
-                    axios(config)
-                        .then(function (response) {
-                            console.log(response.data);
-                        })
-                        .catch(function (error) {
-                            console.log(error);
-                        });
+                    addProduct(product, mode, productId);
+                    history.push("/")
                 }}
             >
                 {({ values, handleChange, handleBlur }) => (
@@ -145,4 +141,8 @@ const ProductForm = ({ mode }) => {
     );
 }
 
-export default ProductForm;
+export default connect(null, {
+    addProduct
+})(ProductForm);
+
+// export default ProductForm;

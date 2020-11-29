@@ -6,3 +6,24 @@ export const getProducts = () => async dispatch => {
             dispatch({ type: 'INITIALIZE', payload: response.data });
         })
 }
+
+export const addProduct = (product, mode, productId) => async dispatch => {
+
+    product = { ...product, rating: parseFloat(product.rating), available: product.available === "true" ? true : false };
+
+    var config = {
+        //changer la methode de la requête dynamiquement en fonction du mode
+        method: mode === "create" ? 'post' : 'put',
+        url: `/api/phones${mode === "create" ? '' : `/${productId}`}`,
+        data: product
+    };
+
+    axios(config)
+        .then(function (response) {
+            console.log(response.data);
+            dispatch({ type: 'ADD_PRODUCT', payload: response.data });
+        })
+        .catch(function (error) {
+            console.log(error);
+        });
+}
