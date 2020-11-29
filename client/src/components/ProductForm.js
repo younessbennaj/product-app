@@ -8,6 +8,13 @@ import {
     useParams
 } from "react-router-dom";
 
+//Material UI 
+import TextField from '@material-ui/core/TextField';
+import Box from '@material-ui/core/Box';
+import Select from '@material-ui/core/Select';
+import Rating from '@material-ui/lab/Rating';
+import Button from '@material-ui/core/Button';
+
 //Formik
 import { Formik, Form, Field } from 'formik';
 
@@ -22,14 +29,13 @@ const ProductSchema = Yup.object({
     price: Yup.number()
         .min(0, 'The price must be greater than 0')
         .required('Required'),
-    //La note doit être comprise entre 0 et 5
     rating: Yup.number()
-        .min(0, 'The rate must be comprised between 0 and 5')
-        .max(5, 'The rate must be comprised between 0 and 5')
+        .min(0, 'The rating must be between 0 and 5')
+        .max(5, 'The rating must be between 0 and 5')
         .required('Required'),
     warranty_years: Yup.number()
         .required('Required'),
-    avaible: Yup.boolean()
+    available: Yup.boolean()
         .required('Required')
 });
 
@@ -54,21 +60,21 @@ const ProductForm = ({ mode }) => {
     }, [productId]);
 
     return (
-        <div>
+        <Box display="flex" flexDirection="column">
             <h1>{mode === "create" ? "Create a new product" : "Update your product"}</h1>
+
             <Formik
                 enableReinitialize={true}
                 initialValues={{
                     name: product.name ? product.name : "",
-                    price: product.price ? product.price : 0,
+                    price: product.price ? product.price : "",
                     rating: product.rating ? product.rating : 0,
                     warranty_years: product.warranty_years ? product.warranty_years : 0,
-                    avaible: product.avaible ? product.avaible : true
+                    available: product.available ? product.available : true
                 }}
                 validationSchema={ProductSchema}
                 onSubmit={product => {
-
-                    product = { ...product, avaible: product.avaible === "true" ? true : false };
+                    product = { ...product, rating: parseFloat(product.rating), available: product.available === "true" ? true : false };
 
                     var config = {
                         //changer la methode de la requête dynamiquement en fonction du mode
@@ -84,56 +90,58 @@ const ProductForm = ({ mode }) => {
                         .catch(function (error) {
                             console.log(error);
                         });
-
-                    console.log(config);
                 }}
             >
-                {({ values }) => (
-                    <Form>
-                        <div>
-                            <label htmlFor="name">name</label>
-                            <Field type="text" name="name" id="name" />
-                        </div>
-                        <div>
-                            <label htmlFor="price">price</label>
-                            <Field type="number" name="price" id="price" />
-                        </div>
-                        <div>
-                            <label htmlFor="rating">rating</label>
-                            <Field as="select" name="rating" id="rating">
-                                {[0, 1, 2, 3, 4, 5].map(rate => {
-                                    return <option key={rate} value={rate}>{rate}</option>
-                                })}
-                            </Field>
-                        </div>
-                        <div>
-                            <label htmlFor="warranty_years">warranty</label>
-                            <Field type="number" name="warranty_years" id="warranty_years" />
-                        </div>
-                        <fieldset>
-                            <legend>Select a stock status:</legend>
+                {({ values, handleChange, handleBlur }) => (
+                    <Form style={{
+                        display: "flex",
+                        flexDirection: "column"
+                    }}>
+                        <Box my={3} display="flex" flexDirection="column" >
+                            <label style={{ display: "none" }} htmlFor="name">name</label>
+                            <TextField type="text" id="name" name="name" variant="outlined" label="Name" value={values.name} onChange={handleChange} onBlur={handleBlur} />
+                        </Box>
+                        <Box my={3} display="flex" flexDirection="column">
+                            <label style={{ display: "none" }} htmlFor="price">price</label>
+                            <TextField type="number" id="price" name="price" variant="outlined" label="Price" value={values.price} onChange={handleChange} onBlur={handleBlur} />
+                        </Box>
+                        <Box my={3} display="flex" flexDirection="column">
+                            <Box ml={1} my={2} color="darkgrey">
+                                <label htmlFor="rating">Rating</label>
+                            </Box>
+                            <Rating id="rating" name="rating" value={parseFloat(values.rating)} onChange={handleChange} onBlur={handleBlur} />
+                        </Box>
+                        <Box my={3}>
+                            <label style={{ display: "none" }} htmlFor="warranty_years">warranty</label>
+                            <TextField type="number" id="warranty_years" name="warranty_years" variant="outlined" label="Warranty" value={values.warranty_years} onChange={handleChange} onBlur={handleBlur} />
+                        </Box>
+                        <Box as="fieldset" p={4}>
+                            <Box fontWeight="fontWeightRegular" fontSize={16} pb={3}>
+                                <legend>Select a stock status:</legend>
+                            </Box>
 
-                            <div>
-                                <label >
-                                    avaible
-                                    <Field type="radio" name="avaible" value="true" />
+                            <Box my={2}>
+                                <label>
+                                    <Field type="radio" name="available" value="true" />
+                                    Available
                                 </label>
-                            </div>
+                            </Box>
 
-                            <div>
+                            <Box my={2}>
                                 <label >
-                                    out of stock
-                                    <Field type="radio" name="avaible" value="false" />
+                                    <Field type="radio" name="available" value="false" />
+                                    Out of stock
                                 </label>
-                            </div>
+                            </Box>
 
-                        </fieldset>
-                        <input type="submit" value={mode === "create" ? "add product" : "update product"} />
+                        </Box>
+                        <Button type="submit" variant="contained" color="primary">{mode === "create" ? "add product" : "update product"}</Button>
                     </Form>
+
                 )}
 
             </ Formik>
-        </div>
+        </Box>
     );
 }
 
