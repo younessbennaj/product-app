@@ -8,7 +8,6 @@ import { getProducts } from "../actions";
 
 //Material UI
 import Box from '@material-ui/core/Box';
-import Container from '@material-ui/core/Container';
 import Button from '@material-ui/core/Button';
 
 //Components
@@ -18,7 +17,7 @@ import StyledRouterLink from "./StyledRouterLink";
 const ProductList = ({ getProducts, data }) => {
     useEffect(() => {
         getProducts();
-    }, []);
+    }, [getProducts]);
 
     return (
         <div>
