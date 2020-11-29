@@ -20,8 +20,7 @@ export const addProduct = (product, mode, productId) => async dispatch => {
 
     axios(config)
         .then(function (response) {
-            console.log(response.data);
-            dispatch({ type: 'ADD_PRODUCT', payload: response.data });
+            dispatch({ type: mode === "create" ? 'ADD_PRODUCT' : 'EDIT_PRODUCT', payload: response.data });
         })
         .catch(function (error) {
             console.log(error);

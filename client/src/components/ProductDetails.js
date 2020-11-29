@@ -10,6 +10,7 @@ import Rating from '@material-ui/lab/Rating';
 //React router
 import {
     useParams,
+    useHistory
 } from "react-router-dom";
 
 //Import des composants
@@ -22,10 +23,11 @@ const ProductDetails = () => {
 
     const [product, setProduct] = useState(null);
 
+    let history = useHistory();
+
     useEffect(() => {
         axios.get(`/api/phones/${productId}`)
             .then(response => {
-                console.log(response.data);
                 setProduct(response.data);
             })
     }, [productId]);
@@ -33,7 +35,7 @@ const ProductDetails = () => {
     function handleDeleteClick() {
         axios.delete(`/api/phones/${productId}`)
             .then(response => {
-                console.log(response.data);
+                history.push("/");
             })
     }
     return (
