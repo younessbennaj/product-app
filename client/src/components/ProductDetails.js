@@ -3,11 +3,8 @@ import axios from "axios";
 
 //React router
 import {
+    useParams,
     Link
-} from "react-router-dom";
-
-import {
-    useParams
 } from "react-router-dom";
 
 const ProductDetails = () => {
@@ -23,11 +20,12 @@ const ProductDetails = () => {
                 setProduct(response.data);
             })
     }, [productId]);
-    function handleEditClick() {
-        console.log('edit');
-    }
+
     function handleDeleteClick() {
-        console.log('delete');
+        axios.delete(`/api/phones/${productId}`)
+            .then(response => {
+                console.log(response.data);
+            })
     }
     return (
         <>
@@ -50,7 +48,7 @@ const ProductDetails = () => {
                     </div>
                     <div>
                         {/* Action button here */}
-                        <button onClick={handleEditClick}><Link to={`/edit/${product._id}`}>Edit</Link></button>
+                        <button><Link to={`/edit/${product._id}`}>Edit</Link></button>
                         <button onClick={handleDeleteClick}>Delete</button>
                     </div>
                 </div>
