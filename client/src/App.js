@@ -2,13 +2,16 @@ import React, { useState, useEffect } from 'react';
 
 import axios from "axios";
 
+import Container from '@material-ui/core/Container';
+import Button from '@material-ui/core/Button';
+import Link from '@material-ui/core/Link';
 
 //React router
 import {
   BrowserRouter as Router,
   Switch,
   Route,
-  Link
+  Link as RouterLink
 } from "react-router-dom";
 
 //Import des composants 
@@ -27,7 +30,7 @@ function App() {
   }, []);
   return (
     <Router>
-      <div>
+      <Container maxWidth="sm">
         <h1>Hello World !!</h1>
 
         <Switch>
@@ -45,14 +48,16 @@ function App() {
                       <div>
                         <h2>{phone.name}</h2>
                         <p>${phone.price}</p>
-                        <button><Link to={`/product/${phone._id}`}>Details</Link></button>
+                        <button>
+                          <RouterLink style={{ textDecoration: 'none' }} to={`/product/${phone._id}`}>Details</RouterLink>
+                        </button>
                       </div>
                     </li>
                   )
                 })}
               </ul>
               <div>
-                <button><Link to="/create">Create a product</Link></button>
+                <Button variant="contained" color="primary"><RouterLink to="/create">Create a product</RouterLink></Button>
               </div>
             </div>
           </Route>
@@ -72,7 +77,7 @@ function App() {
             </div>
           </Route>
         </Switch>
-      </div>
+      </Container>
     </Router>
   );
 }
