@@ -10,7 +10,6 @@ import Rating from '@material-ui/lab/Rating';
 //React router
 import {
     useParams,
-    Link
 } from "react-router-dom";
 
 //Import des composants
@@ -68,7 +67,6 @@ const ProductDetails = () => {
                         </div>
                         <div>
                             <Chip
-                                label="Basic"
                                 variant="outlined"
                                 label={product.available ? 'avaible' : 'out of stock'}
                                 color={product.available ? 'primary' : 'secondary'}
