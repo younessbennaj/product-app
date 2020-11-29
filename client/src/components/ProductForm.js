@@ -8,6 +8,12 @@ import {
     useParams
 } from "react-router-dom";
 
+//Material UI 
+import TextField from '@material-ui/core/TextField';
+import Box from '@material-ui/core/Box';
+import Select from '@material-ui/core/Select';
+import Rating from '@material-ui/lab/Rating';
+
 //Formik
 import { Formik, Form, Field } from 'formik';
 
@@ -22,10 +28,9 @@ const ProductSchema = Yup.object({
     price: Yup.number()
         .min(0, 'The price must be greater than 0')
         .required('Required'),
-    //La note doit être comprise entre 0 et 5
     rating: Yup.number()
-        .min(0, 'The rate must be comprised between 0 and 5')
-        .max(5, 'The rate must be comprised between 0 and 5')
+        .min(0, 'The rating must be between 0 and 5')
+        .max(5, 'The rating must be between 0 and 5')
         .required('Required'),
     warranty_years: Yup.number()
         .required('Required'),
@@ -39,6 +44,8 @@ const ProductForm = ({ mode }) => {
 
     const [product, setProduct] = useState({});
 
+    const [rating, setRating] = useState(0);
+
     /*
         Si on passe un productId via les props du composant, alors on va récupérer 
         les données du produit pour pré-remplir le formulaire dans le cas de la modification
@@ -49,6 +56,7 @@ const ProductForm = ({ mode }) => {
             axios.get(`/api/phones/${productId}`)
                 .then(response => {
                     setProduct(response.data);
+                    setRating(response.dat.rating);
                 })
         }
     }, [productId]);
@@ -57,7 +65,7 @@ const ProductForm = ({ mode }) => {
         <div>
             <h1>{mode === "create" ? "Create a new product" : "Update your product"}</h1>
             <Formik
-                enableReinitialize={true}
+                // enableReinitialize={true} 
                 initialValues={{
                     name: product.name ? product.name : "",
                     price: product.price ? product.price : 0,
@@ -68,47 +76,48 @@ const ProductForm = ({ mode }) => {
                 validationSchema={ProductSchema}
                 onSubmit={product => {
 
-                    product = { ...product, avaible: product.avaible === "true" ? true : false };
+                    product = { ...product, rating, avaible: product.avaible === "true" ? true : false };
+                    console.log(product);
+                    // var config = {
+                    //     //changer la methode de la requête dynamiquement en fonction du mode
+                    //     method: mode === "create" ? 'post' : 'put',
+                    //     url: `/api/phones${mode === "create" ? '' : `/${productId}`}`,
+                    //     data: product
+                    // };
 
-                    var config = {
-                        //changer la methode de la requête dynamiquement en fonction du mode
-                        method: mode === "create" ? 'post' : 'put',
-                        url: `/api/phones${mode === "create" ? '' : `/${productId}`}`,
-                        data: product
-                    };
+                    // axios(config)
+                    //     .then(function (response) {
+                    //         console.log(response.data);
+                    //     })
+                    //     .catch(function (error) {
+                    //         console.log(error);
+                    //     });
 
-                    axios(config)
-                        .then(function (response) {
-                            console.log(response.data);
-                        })
-                        .catch(function (error) {
-                            console.log(error);
-                        });
-
-                    console.log(config);
+                    // console.log(config);
                 }}
             >
-                {({ values }) => (
+                {({ values, handleChange, handleBlur }) => (
                     <Form>
+                        <Box my={3}>
+                            <label style={{ display: "none" }} htmlFor="name">name</label>
+                            <Field component={() => <TextField variant="outlined" label="Name" />} type="text" name="name" id="name" />
+                        </Box>
+                        <Box my={3}>
+                            <label style={{ display: "none" }} htmlFor="price">price</label>
+                            <Field component={() => <TextField variant="outlined" label="Price" />} type="number" name="price" id="price" />
+                        </Box>
                         <div>
-                            <label htmlFor="name">name</label>
-                            <Field type="text" name="name" id="name" />
-                        </div>
-                        <div>
-                            <label htmlFor="price">price</label>
-                            <Field type="number" name="price" id="price" />
-                        </div>
-                        <div>
-                            <label htmlFor="rating">rating</label>
+                            <label style={{ display: "none" }} htmlFor="rating">rating</label>
                             <Field as="select" name="rating" id="rating">
                                 {[0, 1, 2, 3, 4, 5].map(rate => {
                                     return <option key={rate} value={rate}>{rate}</option>
                                 })}
                             </Field>
+                            {/* <Rating name="rating" value={rating} onChange={(e, newValue) => setRating(newValue)} /> */}
                         </div>
                         <div>
-                            <label htmlFor="warranty_years">warranty</label>
-                            <Field type="number" name="warranty_years" id="warranty_years" />
+                            <label style={{ display: "none" }} htmlFor="warranty_years">warranty</label>
+                            <Field component={() => <TextField variant="outlined" label="Warranty" />} type="number" name="warranty_years" id="warranty_years" />
                         </div>
                         <fieldset>
                             <legend>Select a stock status:</legend>
@@ -130,6 +139,7 @@ const ProductForm = ({ mode }) => {
                         </fieldset>
                         <input type="submit" value={mode === "create" ? "add product" : "update product"} />
                     </Form>
+
                 )}
 
             </ Formik>
