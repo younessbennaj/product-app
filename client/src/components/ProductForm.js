@@ -64,7 +64,7 @@ const ProductForm = ({ mode }) => {
             <h1>{mode === "create" ? "Create a new product" : "Update your product"}</h1>
 
             <Formik
-                // enableReinitialize={true} 
+                enableReinitialize={true}
                 initialValues={{
                     name: product.name ? product.name : "",
                     price: product.price ? product.price : "",
