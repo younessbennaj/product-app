@@ -4,6 +4,10 @@ import axios from "axios";
 
 import * as Yup from 'yup';
 
+import {
+    useParams
+} from "react-router-dom";
+
 //Formik
 import { Formik, Form, Field } from 'formik';
 
@@ -29,7 +33,9 @@ const ProductSchema = Yup.object({
         .required('Required')
 });
 
-const ProductForm = ({ mode, productId }) => {
+const ProductForm = ({ mode }) => {
+
+    let { productId } = useParams();
 
     const [product, setProduct] = useState({});
 

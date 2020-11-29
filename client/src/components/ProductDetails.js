@@ -1,7 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import axios from "axios";
 
-const ProductDetails = ({ productId }) => {
+//React router
+import {
+    useParams,
+    Link
+} from "react-router-dom";
+
+const ProductDetails = () => {
+
+    let { productId } = useParams();
+
     const [product, setProduct] = useState(null);
 
     useEffect(() => {
@@ -11,11 +20,12 @@ const ProductDetails = ({ productId }) => {
                 setProduct(response.data);
             })
     }, [productId]);
-    function handleEditClick() {
-        console.log('edit');
-    }
+
     function handleDeleteClick() {
-        console.log('delete');
+        axios.delete(`/api/phones/${productId}`)
+            .then(response => {
+                console.log(response.data);
+            })
     }
     return (
         <>
@@ -38,7 +48,7 @@ const ProductDetails = ({ productId }) => {
                     </div>
                     <div>
                         {/* Action button here */}
-                        <button onClick={handleEditClick}>Edit</button>
+                        <button><Link to={`/edit/${product._id}`}>Edit</Link></button>
                         <button onClick={handleDeleteClick}>Delete</button>
                     </div>
                 </div>
