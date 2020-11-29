@@ -4,7 +4,6 @@ import axios from "axios";
 
 import Box from '@material-ui/core/Box';
 import Container from '@material-ui/core/Container';
-import Button from '@material-ui/core/Button';
 
 //React router
 import {
@@ -13,15 +12,11 @@ import {
   Route,
 } from "react-router-dom";
 
-//Actions
-import { getProducts } from "./actions";
 
 //Import des composants 
 import ProductList from "./components/ProductList";
 import ProductDetails from "./components/ProductDetails";
 import ProductForm from "./components/ProductForm";
-import Price from "./components/Price";
-import StyledRouterLink from "./components/StyledRouterLink";
 
 function App() {
 
