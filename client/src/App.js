@@ -2,7 +2,9 @@ import React, { useState, useEffect } from 'react';
 
 import axios from "axios";
 
+import Box from '@material-ui/core/Box';
 import Container from '@material-ui/core/Container';
+import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import Link from '@material-ui/core/Link';
 
@@ -14,9 +16,12 @@ import {
   Link as RouterLink
 } from "react-router-dom";
 
+
 //Import des composants 
 import ProductDetails from "./components/ProductDetails";
 import ProductForm from "./components/ProductForm";
+import Price from "./components/Price";
+import StyledRouterLink from "./components/StyledRouterLink";
 
 function App() {
 
@@ -31,34 +36,40 @@ function App() {
   return (
     <Router>
       <Container maxWidth="sm">
-        <h1>Hello World !!</h1>
+        <Box fontWeight="fontWeightBold" textAlign="center">
+          <h1>#ProductApp</h1>
+        </Box>
 
         <Switch>
           {/* Route principale de l'application path: "/" */}
           <Route path="/" exact>
             {/* ProductList */}
             <div>
-              <ul>
+              <ul style={{ listStyle: 'none' }}>
                 {phones.map(phone => {
                   return (
                     <li key={phone._id}>
-                      <div>
-                        <img src="https://via.placeholder.com/150x150" alt={`image of ${phone.name}`} />
-                      </div>
-                      <div>
-                        <h2>{phone.name}</h2>
-                        <p>${phone.price}</p>
-                        <button>
-                          <RouterLink style={{ textDecoration: 'none' }} to={`/product/${phone._id}`}>Details</RouterLink>
-                        </button>
-                      </div>
+                      <Box display="flex" bgcolor="white" p={3} boxShadow={2} my={3} borderRadius={8}>
+                        <Box borderRadius={16} style={{ overflow: 'hidden' }}>
+                          <img src="https://via.placeholder.com/150x150" alt={`image of ${phone.name}`} />
+                        </Box>
+                        <Box display="flex" flexDirection="column" px={4}>
+                          <Box fontWeight="fontWeightMedium" fontSize={22} py={1} lineHeight="normal">
+                            <p style={{ margin: '0' }}>{phone.name}</p>
+                          </Box>
+                          <Price>{phone.price}</Price>
+                          <Button variant="contained" color="primary" style={{ width: 'max-content' }}>
+                            <StyledRouterLink url={`/product/${phone._id}`}>Details</StyledRouterLink>
+                          </Button>
+                        </Box>
+                      </ Box>
                     </li>
                   )
                 })}
               </ul>
-              <div>
-                <Button variant="contained" color="primary"><RouterLink to="/create">Create a product</RouterLink></Button>
-              </div>
+              <Box textAlign="center">
+                <Button variant="contained" color="primary"><StyledRouterLink url="/create">Create a product</StyledRouterLink></Button>
+              </Box>
             </div>
           </Route>
           {/* Route pour la page de détails d'un produit en fonction de l'Id path : "/product/:id" */}
